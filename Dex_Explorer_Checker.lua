@@ -21,3 +21,25 @@ else
       end
    end
 end
+wait(30)
+if HiddenUI then
+   for _, v in ipairs(HiddenUI:GetDescendants()) do
+      if v:IsA("Frame") and v.Name == "ResizeControls" and v.Parent.Name == "Main" then
+         if v.Parent.Parent:IsA("ScreenGui") then
+            getgenv().notify("Warning", "We know you're using Dex Explorer, this script is open source man!", 5)
+         else
+            getgenv().notify("Warning", "We can see you're using Dex Explorer, this script is open source man!", 5)
+         end
+      end
+   end
+else
+   for _, v in ipairs(getgenv().CoreGui:GetDescendants()) do
+      if v:IsA("Frame") and v.Name == "ResizeControls" and v.Parent.Name == "Main" then
+         if v.Parent.Parent:IsA("ScreenGui") then
+            getgenv().notify("Warning", "We know you're using Dex Explorer, this script is open source man!", 5)
+         else
+            getgenv().notify("Warning", "We can see you're using Dex Explorer, this script is open source man!", 5)
+         end
+      end
+   end
+end
