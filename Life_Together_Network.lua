@@ -71,5 +71,7 @@ function send_remote(...)
    Network.send(...)
 end
 wait(0.1)
+getgenv().send_remote = send_remote
+getgenv().send_function = send_function
 getgenv().Get = send_function
 getgenv().Send = send_remote
