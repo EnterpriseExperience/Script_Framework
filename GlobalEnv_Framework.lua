@@ -9,6 +9,13 @@ getgenv().queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport o
 getgenv().JobID = getgenv().Game.JobId
 getgenv().PlaceID = getgenv().Game.PlaceId
 queueteleport = getgenv().queueteleport
+local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/refs/heads/main/Notification_Lib.lua"))()
+wait(0.1)
+function notify(notif_type, msg, duration)
+   NotifyLib:External_Notification(tostring(notif_type), tostring(msg), tonumber(duration))
+end
+wait(0.1)
+getgenv().notify = notify
 wait(0.1)
 local function Service_Wrap(service)
    if cloneref then
