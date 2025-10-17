@@ -313,21 +313,6 @@ getgenv().PlayerScripts = getgenv().LocalPlayer:WaitForChild("PlayerScripts") or
 getgenv().Character = Get_Char(getgenv().LocalPlayer) or getgenv().LocalPlayer.Character or getgenv().LocalPlayer.CharacterAdded:Wait()
 wait(0.1)
 
-local function Get_Char(Player)
-   if not Player or not Player.Character then
-      local Char = nil
-      local conn
-      conn = Player.CharacterAdded:Connect(function(c)
-         Char = c
-      end)
-
-      repeat task.wait() until Char or not Player.Parent
-      if conn then conn:Disconnect() end
-      return Char
-   end
-   return Player.Character
-end
-
 local function SafeGetHumanoid(char)
 	local hum = char:FindFirstChildWhichIsA("Humanoid")
 
@@ -337,6 +322,8 @@ local function SafeGetHumanoid(char)
 		return char:WaitForChild("Humanoid", 5)
 	end
 end
+wait(0.1)
+getgenv().SafeGetHumanoid = SafeGetHumanoid
 
 local function SafeGetHead(char)
 	local head = char:FindFirstChild("Head")
@@ -346,6 +333,8 @@ local function SafeGetHead(char)
 		return char:WaitForChild("Head", 5)
 	end
 end
+wait(0.1)
+getgenv().SafeGetHead = SafeGetHead
 
 local function SafeGetHRP(char)
 	local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -355,6 +344,8 @@ local function SafeGetHRP(char)
 		return char:WaitForChild("HumanoidRootPart", 5)
 	end
 end
+wait(0.1)
+getgenv().SafeGetHRP = SafeGetHRP
 
 if not getgenv().Anti_Idle_Controller_Loaded then
    if getconnections or get_signal_cons then
