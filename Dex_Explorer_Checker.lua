@@ -21,7 +21,7 @@ else
       end
    end
 end
-wait(30)
+wait(0.5)
 if HiddenUI then
    for _, v in ipairs(HiddenUI:GetDescendants()) do
       if v:IsA("Frame") and v.Name == "ResizeControls" and v.Parent.Name == "Main" then
