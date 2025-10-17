@@ -291,6 +291,8 @@ local function Get_Char(Player)
    end
    return Player.Character
 end
+wait(0.1)
+getgenv().Get_Char = Get_Char
 
 wait(0.1)
 getgenv().Terrain = getgenv().Workspace.Terrain or getgenv().Workspace:FindFirstChild("Terrain")
