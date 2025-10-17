@@ -9,6 +9,8 @@ getgenv().queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport o
 getgenv().JobID = getgenv().Game.JobId
 getgenv().PlaceID = getgenv().Game.PlaceId
 queueteleport = getgenv().queueteleport
+local set_fps = setfpscap or setfps
+getgenv().SetFPSCap = set_fps
 local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/refs/heads/main/Notification_Lib.lua"))()
 wait(0.1)
 function notify(notif_type, msg, duration)
