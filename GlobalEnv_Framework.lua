@@ -41,6 +41,8 @@ local function executor_contains(substr)
 
    return string.find(string.lower(executor_string), string.lower(substr), 1, true) ~= nil
 end
+wait(0.2)
+getgenv().executor_contains = executor_contains
 
 if executor_contains("LX63") then
    function notify(notif_type, msg, duration)
