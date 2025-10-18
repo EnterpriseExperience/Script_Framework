@@ -9,15 +9,60 @@ getgenv().queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport o
 getgenv().JobID = getgenv().Game.JobId
 getgenv().PlaceID = getgenv().Game.PlaceId
 queueteleport = getgenv().queueteleport
-local set_fps = setfpscap or setfps
+
+local function blankfunction(...)
+    return ...
+end
+wait(0.1)
+local set_fps = setfpscap or setfps or blankfunction
 getgenv().SetFPSCap = set_fps
 local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/refs/heads/main/Notification_Lib.lua"))()
 wait(0.1)
-function notify(notif_type, msg, duration)
-   NotifyLib:External_Notification(tostring(notif_type), tostring(msg), tonumber(duration))
+local function retrieve_executor()
+   local name
+   if identifyexecutor then
+      name = identifyexecutor()
+   end
+   return { Name = name or "Unknown Executor" }
 end
+
+local function identify_executor()
+   local executorDetails = retrieve_executor()
+   return tostring(executorDetails.Name)
+end
+
 wait(0.1)
-getgenv().notify = notify
+local executor_string = identify_executor()
+
+local function executor_contains(substr)
+   if type(executor_string) ~= "string" then
+      return false
+   end
+
+   return string.find(string.lower(executor_string), string.lower(substr), 1, true) ~= nil
+end
+
+if executor_contains("LX63") then
+   function notify(notif_type, msg, duration)
+      NotifyLib:StarterGui_Notify(tostring(notif_type), tostring(msg), tonumber(duration))
+   end
+   wait(0.1)
+   getgenv().notify = notify
+else
+   function notify(notif_type, msg, duration)
+      NotifyLib:External_Notification(tostring(notif_type), tostring(msg), tonumber(duration))
+   end
+   wait(0.1)
+   getgenv().notify = notify
+end
+
+if executor_string == "LX63" then
+   local set_fps = setfpscap or setfps
+
+   if setfpscap or setfps then
+      set_fps(999)
+   end
+end
 wait(0.1)
 local function Service_Wrap(service)
    if cloneref then
