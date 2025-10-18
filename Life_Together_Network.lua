@@ -121,6 +121,10 @@ else
     getgenv().CCTV = CCTV
     local Tween = require(Core:FindFirstChild("Tween"))
     getgenv().Tween = Tween
+    local Seat = require(Game_Folder:FindFirstChild("Seat"))
+    getgenv().Seat = Seat
+    local Blur = require(Core:FindFirstChild("Blur"))
+    getgenv().Blur = Blur
     local Modules = ReplicatedStorage:FindFirstChild("Modules")
 end
 wait(0.4)
