@@ -99,17 +99,17 @@ if executor_contains("LX63") then
         end
     end
 else
-    local Invisible_Module = require(Game_Folder:FindFirstChild("InvisibleMode"))
+    local Invisible_Module = require(Game:FindFirstChild("InvisibleMode"))
     getgenv().Invisible_Module = Invisible_Module
-    local Billboard_GUI = require(Game_Folder:FindFirstChild("CharacterBillboardGui"))
+    local Billboard_GUI = require(Game:FindFirstChild("CharacterBillboardGui"))
     getgenv().Billboard_GUI = Billboard_GUI
-    local PlotMarker = require(Game_Folder:FindFirstChild("PlotMarker"))
+    local PlotMarker = require(Game:FindFirstChild("PlotMarker"))
     getgenv().PlotMarker = PlotMarker
     local Data = require(Core:FindFirstChild("Data"))
     getgenv().Data = Data
-    local Phone_Module = Game_Folder:FindFirstChild("Phone")
+    local Phone_Module = Game:FindFirstChild("Phone")
     getgenv().Phone_Module = Phone_Module
-    local Phone = require(Game_Folder:FindFirstChild("Phone"))
+    local Phone = require(Game:FindFirstChild("Phone"))
     getgenv().Phone = Phone
     local Privacy = require(Core:FindFirstChild("Privacy"))
     getgenv().Privacy = Privacy
@@ -118,7 +118,7 @@ else
     local Messages = require(AppModules:FindFirstChild("Messages"))
     getgenv().Messages = Messages
     Network = require(Core:FindFirstChild("Net"))
-    local CCTV = require(Game_Folder:FindFirstChild("CCTV"))
+    local CCTV = require(Game:FindFirstChild("CCTV"))
     getgenv().CCTV = CCTV
     local Tween = require(Core:FindFirstChild("Tween"))
     getgenv().Tween = Tween
