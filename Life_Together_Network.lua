@@ -71,7 +71,9 @@ if executor_contains("LX63") then
         "Privacy",
         "Messages",
         "CCTV",
-        "Tween"
+        "Tween",
+        "Seat",
+        "Blur",
     }
 
     for _, target in ipairs(targets) do
