@@ -59,7 +59,8 @@ local Workspace = cloneref and cloneref(getgenv().Game:GetService("Workspace")) 
 local Modules = ReplicatedStorage:WaitForChild("Modules")
 getgenv().Modules = Modules
 local Core = Modules:WaitForChild("Core")
-local Game = Modules:WaitForChild("Game")
+local Game_Folder = Modules:WaitForChild("Game")
+getgenv().Game_Folder = Game_Folder
 wait(0.1)
 if executor_contains("LX63") then
     local targets = {
@@ -98,17 +99,17 @@ if executor_contains("LX63") then
         end
     end
 else
-    local Invisible_Module = require(Game:FindFirstChild("InvisibleMode"))
+    local Invisible_Module = require(Game_Folder:FindFirstChild("InvisibleMode"))
     getgenv().Invisible_Module = Invisible_Module
-    local Billboard_GUI = require(Game:FindFirstChild("CharacterBillboardGui"))
+    local Billboard_GUI = require(Game_Folder:FindFirstChild("CharacterBillboardGui"))
     getgenv().Billboard_GUI = Billboard_GUI
-    local PlotMarker = require(Game:FindFirstChild("PlotMarker"))
+    local PlotMarker = require(Game_Folder:FindFirstChild("PlotMarker"))
     getgenv().PlotMarker = PlotMarker
     local Data = require(Core:FindFirstChild("Data"))
     getgenv().Data = Data
-    local Phone_Module = Game:FindFirstChild("Phone")
+    local Phone_Module = Game_Folder:FindFirstChild("Phone")
     getgenv().Phone_Module = Phone_Module
-    local Phone = require(Game:FindFirstChild("Phone"))
+    local Phone = require(Game_Folder:FindFirstChild("Phone"))
     getgenv().Phone = Phone
     local Privacy = require(Core:FindFirstChild("Privacy"))
     getgenv().Privacy = Privacy
@@ -117,7 +118,7 @@ else
     local Messages = require(AppModules:FindFirstChild("Messages"))
     getgenv().Messages = Messages
     Network = require(Core:FindFirstChild("Net"))
-    local CCTV = require(Game:FindFirstChild("CCTV"))
+    local CCTV = require(Game_Folder:FindFirstChild("CCTV"))
     getgenv().CCTV = CCTV
     local Tween = require(Core:FindFirstChild("Tween"))
     getgenv().Tween = Tween
@@ -151,7 +152,7 @@ wait(0.1)
 getgenv().show_notification = show_notification
 getgenv().Modules = Modules
 getgenv().Core = Core
-getgenv().Game_Folder = Game
+getgenv().Game_Folder = Game_Folder
 getgenv().Net = Network
 wait(0.1)
 function send_function(...)
