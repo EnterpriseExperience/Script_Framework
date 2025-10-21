@@ -6,6 +6,20 @@ local RunTime_Functions_API = {}
 
 local TextChatService = cloneref and cloneref(getgenv().Game:GetService("TextChatService")) or getgenv().Game:GetService("TextChatService")
 wait(0.3)
+
+local function hasProp(inst, prop)
+   return inst and isProperty(inst, prop) ~= nil
+end
+
+local function setProperty(inst, prop, v)
+	local s, _ = pcall(function() inst[prop] = v end)
+	return s
+end
+
+local function safeSet(inst, prop, val)
+   if inst and hasProp(inst, prop) then setProperty(inst, prop, val) end
+end
+wait(0.1)
 function toggle_chat_tabs(toggle)
     local Tabs = getgenv().TextChatService:FindFirstChildOfClass("ChannelTabsConfiguration")
     wait(0.1)
