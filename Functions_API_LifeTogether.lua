@@ -7,6 +7,14 @@ local RunTime_Functions_API = {}
 local TextChatService = cloneref and cloneref(getgenv().Game:GetService("TextChatService")) or getgenv().Game:GetService("TextChatService")
 wait(0.3)
 
+local function isProperty(inst, prop)
+	local s, r = pcall(function() return inst[prop] end)
+	if not s then return nil end
+	return r
+end
+wait(0.1)
+getgenv().isProperty = isProperty
+
 local function hasProp(inst, prop)
    return inst and isProperty(inst, prop) ~= nil
 end
@@ -49,12 +57,18 @@ wait(0.1)
 getgenv().decodeHTMLEntities = decodeHTMLEntities
 
 if getgenv().FireParticlesAdded then
-   getgenv().notify("Warning", "Connection has already been loaded here.", 5)
+    getgenv().notify("Warning", "Connection has already been loaded here.", 5)
 else
-   local folder = getgenv().StarterGui:WaitForChild("FireTemporaryReparentFolder")
-   getgenv().FireParticlesAdded = folder.ChildAdded:Connect(function(particle)
-      particle:Destroy()
-   end)
+    local folder = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
+    if not folder then
+        folder = Instance.new("Folder")
+        folder.Name = "FireTemporaryReparentFolder"
+        folder.Parent = getgenv().StarterGui
+    end
+    wait(0.1)
+    getgenv().FireParticlesAdded = folder.ChildAdded:Connect(function(particle)
+        particle:Destroy()
+    end)
 end
 wait(0.2)
 getgenv().SpamFire = false
