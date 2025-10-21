@@ -63,6 +63,7 @@ local Game_Folder = Modules:WaitForChild("Game")
 getgenv().Game_Folder = Game_Folder
 wait(0.1)
 if executor_contains("LX63") then
+    -- thanks LifeTogether RP for storing these in memory so easily for me to find them! --
     local targets = {
         "InvisibleMode",
         "CharacterBillboardGui",
@@ -75,6 +76,8 @@ if executor_contains("LX63") then
         "Tween",
         "Seat",
         "Blur",
+        "RateLimiter",
+        "Net" -- keep this included, the check from earlier doesn't store it globally, causing other areas to bug out.
     }
 
     for _, target in ipairs(targets) do
