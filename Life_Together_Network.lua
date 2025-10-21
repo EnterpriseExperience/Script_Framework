@@ -126,6 +126,8 @@ else
     getgenv().Seat = Seat
     local Blur = require(Core:FindFirstChild("Blur"))
     getgenv().Blur = Blur
+    local RateLimiter = require(Core:FindFirstChild("RateLimiter"))
+    getgenv().RateLimiter = RateLimiter
     local Modules = ReplicatedStorage:FindFirstChild("Modules")
 end
 wait(0.4)
