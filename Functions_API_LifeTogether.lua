@@ -4,21 +4,22 @@ end
 
 local RunTime_Functions_API = {}
 
+local TextChatService = cloneref and cloneref(getgenv().Game:GetService("TextChatService")) or getgenv().Game:GetService("TextChatService")
 wait(0.3)
 function toggle_chat_tabs(toggle)
-   local Tabs = getgenv().TextChatService:FindFirstChildOfClass("ChannelTabsConfiguration")
-   wait(0.1)
-   if toggle == true then
-      if Tabs then
-         safeSet(Tabs, "Enabled", true)
-      end
-   elseif toggle == false then
-      if Tabs then
-         safeSet(Tabs, "Enabled", false)
-      end
-   else
-      return 
-   end
+    local Tabs = getgenv().TextChatService:FindFirstChildOfClass("ChannelTabsConfiguration")
+    wait(0.1)
+    if toggle == true then
+        if Tabs then
+            safeSet(Tabs, "Enabled", true)
+        end
+    elseif toggle == false then
+        if Tabs then
+            safeSet(Tabs, "Enabled", false)
+        end
+    else
+        return 
+    end
 end
 wait(0.1)
 toggle_chat_tabs(true)
