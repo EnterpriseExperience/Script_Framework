@@ -1,65 +1,73 @@
-getgenv().API_URL = "https://script.google.com/macros/s/AKfycbwHivaX-A1EkhvEVHX8-aYz59Kp3dL-TpfHzFjkHCIaTWItiF2drpQRT5LB8YUf-0re/exec"
+getgenv().API_URL = "https://script.google.com/macros/s/AKfycbwwduM8W2Qx9XltPyD1526giFCcl9qXeks4tnqkGEDrTnUjumQ-RyL2ojSlvJk8XXjc/exec"
 getgenv().HeartbeatInterval = 10
-local Http = game:FindService("HttpService")
-local Players = game:FindService("Players")
+
+local Http = game:GetService("HttpService")
+local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+
 local ClientId = tostring(math.random(100000, 999999)) .. tostring(os.clock())
 local UserId = LocalPlayer.UserId
+
 getgenv().Billboards = getgenv().Billboards or {}
+
 local Owners = {
-   ["L0CKED_1N1"] = true,
-   ["CHEATING_B0SS"] = true,
-   ["Bobmcjoejoebob"] = true,
-   ["CleanestAuraEv3r"] = true
+    ["L0CKED_1N1"] = true,
+    ["CHEATING_B0SS"] = true,
+    ["Bobmcjoejoebob"] = true,
+    ["CleanestAuraEv3r"] = true
 }
 
 if not getgenv().get_char then
-    getgenv().get_char = function(Player)
-        if not Player or typeof(Player) ~= "Instance" or not Player:IsA("Player") then
+    getgenv().get_char = function(player)
+        if not player or typeof(player) ~= "Instance" or not player:IsA("Player") then
             return nil
         end
-
-        local character = Player.Character
+        local character = player.Character
         local attempts = 0
-        local max_attempts = 25
-
-        while not character and attempts < max_attempts do
+        while not character and attempts < 25 do
             task.wait(0.2)
-            character = Player.Character
+            character = player.Character
             attempts += 1
         end
-
         if not character then
             local ok, newChar = pcall(function()
-                return Player.CharacterAdded:Wait()
+                return player.CharacterAdded:Wait()
             end)
-            if ok and newChar then
-                character = newChar
-            end
+            if ok then character = newChar end
         end
-
-        if not character then
-            return nil
-        end
-
         return character
     end
 end
-wait(0.2)
+
+task.wait(0.2)
 local Character = getgenv().get_char(LocalPlayer)
-local char = Character or getgenv().get_char(LocalPlayer)
-if not getgenv().Character then
-    getgenv().Character = Character
-end
+if not getgenv().Character then getgenv().Character = Character end
 
 local function sendRequest(data)
+    local json = Http:JSONEncode(data)
+    print("[FlamesHub] Sending POST:", json)
+
     local ok, res = pcall(function()
-        return Http:PostAsync(getgenv().API_URL, Http:JSONEncode(data))
+        return Http:PostAsync(getgenv().API_URL, json, Enum.HttpContentType.ApplicationJson)
     end)
-    if not ok then return nil end
+
+    if not ok then
+        warn("[FlamesHub] Request failed:", res)
+        return nil
+    end
+
+    print("[FlamesHub] Raw response:", res)
+
     local s, decoded = pcall(function()
         return Http:JSONDecode(res)
     end)
+
+    if not s then
+        warn("[FlamesHub] JSON decode error:", decoded)
+    else
+        print("[FlamesHub] Decoded:", decoded)
+    end
+
     return s and decoded or nil
 end
 
@@ -83,9 +91,9 @@ local function createBillboard(plr)
         local head = char:FindFirstChild("Head")
         if not head then return end
 
-        local existing = getgenv().Billboards[plr]
-        if existing and existing.Parent and existing.Parent.Parent then
-            return 
+        if getgenv().Billboards[plr] then
+            local bb = getgenv().Billboards[plr]
+            if bb.Parent and bb.Parent.Parent then return end
         end
 
         local bb = Instance.new("BillboardGui")
@@ -106,7 +114,7 @@ local function createBillboard(plr)
             txt.Text = "🔥 FLAMES HUB | CLIENT 🔥"
             txt.TextColor3 = Color3.fromRGB(255, 100, 0)
         else
-            return 
+            return
         end
 
         txt.Parent = bb
@@ -129,53 +137,55 @@ local function updateBillboards()
     for _, c in ipairs(clients) do
         active[c.userId] = true
     end
+
     for _, plr in ipairs(Players:GetPlayers()) do
         if active[plr.UserId] then
             createBillboard(plr)
-        else
-            if getgenv().Billboards[plr] then
-                getgenv().Billboards[plr]:Destroy()
-                getgenv().Billboards[plr] = nil
-            end
+        elseif getgenv().Billboards[plr] then
+            getgenv().Billboards[plr]:Destroy()
+            getgenv().Billboards[plr] = nil
         end
     end
 end
 
 local function createSelfBillboard()
+    local char = getgenv().get_char(LocalPlayer)
     if not char then return end
-    local head = char:WaitForChild("Head", 1)
+    local head = char:FindFirstChild("Head")
     if not head then return end
     if getgenv().Billboards[LocalPlayer] then return end
 
     local bb = Instance.new("BillboardGui")
     bb.Name = "FlamesHubTitleSelf"
-    bb.Size = UDim2.new(0,200,0,50)
-    bb.StudsOffset = Vector3.new(0,2.5,0)
+    bb.Size = UDim2.new(0, 200, 0, 50)
+    bb.StudsOffset = Vector3.new(0, 2.5, 0)
     bb.AlwaysOnTop = true
     bb.Parent = head
 
     local txt = Instance.new("TextLabel")
-    txt.Size = UDim2.new(1,0,1,0)
+    txt.Size = UDim2.new(1, 0, 1, 0)
     txt.BackgroundTransparency = 1
     txt.TextScaled = true
     txt.Font = Enum.Font.GothamBold
     txt.TextStrokeTransparency = 0.2
 
-    if Owners[LocalPlayer.Name] then
-        return 
-    else
+    if not Owners[LocalPlayer.Name] then
         txt.Text = "🔥 FLAMES HUB | CLIENT 🔥"
         txt.TextColor3 = Color3.fromRGB(255, 100, 0)
+    else
+        return
     end
 
     txt.Parent = bb
-    Billboards[LocalPlayer] = bb
+    getgenv().Billboards[LocalPlayer] = bb
 end
 
+-- Connect to API
 sendRequest({
+    action = "connect",
     clientId = ClientId,
     userId = UserId,
-    username = LocalPlayer.Name,
+    username = LocalPlayer.Name
 })
 
 task.spawn(function()
@@ -191,9 +201,9 @@ end)
 task.spawn(function()
     while task.wait(getgenv().HeartbeatInterval) do
         sendRequest({
+            action = "heartbeat",
             clientId = ClientId,
-            userId = UserId,
-            heartbeat = true,
+            userId = UserId
         })
         updateBillboards()
     end
@@ -207,16 +217,16 @@ Players.PlayerAdded:Connect(function(plr)
 end)
 
 Players.PlayerRemoving:Connect(function(plr)
-    if Billboards[plr] then
-        Billboards[plr]:Destroy()
-        Billboards[plr] = nil
+    if getgenv().Billboards[plr] then
+        getgenv().Billboards[plr]:Destroy()
+        getgenv().Billboards[plr] = nil
     end
 end)
 
 LocalPlayer.OnTeleport:Connect(function()
     sendRequest({
+        action = "disconnect",
         clientId = ClientId,
-        userId = UserId,
-        disconnect = true,
+        userId = UserId
     })
 end)
