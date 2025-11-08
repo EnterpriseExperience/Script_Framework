@@ -1,14 +1,16 @@
+local request = request or http_request or (syn and syn.request) or (http and http.request) or (fluxus and fluxus.request)
+if not request then error("No compatible HTTP request function found!") end
+
+local Http = game:FindService("HttpService")
+local Players = game:FindService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 getgenv().API_URL = "https://script.google.com/macros/s/AKfycbwwduM8W2Qx9XltPyD1526giFCcl9qXeks4tnqkGEDrTnUjumQ-RyL2ojSlvJk8XXjc/exec"
 getgenv().HeartbeatInterval = 10
-
-local Http = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+getgenv().Billboards = getgenv().Billboards or {}
 
 local ClientId = tostring(math.random(100000, 999999)) .. tostring(os.clock())
 local UserId = LocalPlayer.UserId
-
-getgenv().Billboards = getgenv().Billboards or {}
 
 local Owners = {
     ["L0CKED_1N1"] = true,
@@ -19,9 +21,7 @@ local Owners = {
 
 if not getgenv().get_char then
     getgenv().get_char = function(player)
-        if not player or typeof(player) ~= "Instance" or not player:IsA("Player") then
-            return nil
-        end
+        if not player or typeof(player) ~= "Instance" or not player:IsA("Player") then return nil end
         local character = player.Character
         local attempts = 0
         while not character and attempts < 25 do
@@ -39,47 +39,40 @@ if not getgenv().get_char then
     end
 end
 
-task.wait(0.2)
-local Character = getgenv().get_char(LocalPlayer)
-if not getgenv().Character then getgenv().Character = Character end
-
-local function sendRequest(data)
-    local json = Http:JSONEncode(data)
-    print("[FlamesHub] Sending POST:", json)
+local function sendRequest(params)
+    local query = "?"
+    for k, v in pairs(params) do
+        query = query .. k .. "=" .. Http:UrlEncode(tostring(v)) .. "&"
+    end
+    query = string.sub(query, 1, #query - 1)
 
     local ok, res = pcall(function()
-        return Http:PostAsync(getgenv().API_URL, json, Enum.HttpContentType.ApplicationJson)
+        return request({
+            Url = getgenv().API_URL .. query,
+            Method = "GET"
+        })
     end)
 
-    if not ok then
+    if not ok or not res or not res.Body then
         warn("[FlamesHub] Request failed:", res)
         return nil
     end
 
-    print("[FlamesHub] Raw response:", res)
-
-    local s, decoded = pcall(function()
-        return Http:JSONDecode(res)
+    local success, decoded = pcall(function()
+        return Http:JSONDecode(res.Body)
     end)
 
-    if not s then
-        warn("[FlamesHub] JSON decode error:", decoded)
-    else
-        print("[FlamesHub] Decoded:", decoded)
+    if not success then
+        warn("[FlamesHub] JSON Decode failed:", decoded)
+        return nil
     end
 
-    return s and decoded or nil
+    return decoded
 end
 
 local function getClients()
-    local ok, res = pcall(function()
-        return Http:GetAsync(getgenv().API_URL)
-    end)
-    if not ok then return {} end
-    local s, decoded = pcall(function()
-        return Http:JSONDecode(res)
-    end)
-    return (s and decoded and decoded.clients) or {}
+    local res = sendRequest({ action = "list" })
+    return (res and res.clients) or {}
 end
 
 local function createBillboard(plr)
@@ -180,7 +173,6 @@ local function createSelfBillboard()
     getgenv().Billboards[LocalPlayer] = bb
 end
 
--- Connect to API
 sendRequest({
     action = "connect",
     clientId = ClientId,
