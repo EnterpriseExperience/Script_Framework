@@ -213,7 +213,7 @@ Players.PlayerRemoving:Connect(function(plr)
     end
 end)
 
-game:BindToClose(function()
+LocalPlayer.OnTeleport:Connect(function()
     sendRequest({
         clientId = ClientId,
         userId = UserId,
