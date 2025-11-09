@@ -163,7 +163,6 @@ local function check_fire_count()
    end
    if count >= getgenv().fire_detection_amount then
       getgenv().CompletelyHideFlamesComingIn(true)
-      return getgenv().notify("Info", "Enabled auto-hide flames, flames limit threshold reached (50+ fires found (spam), you're welcome).", 10)
    end
 end
 
