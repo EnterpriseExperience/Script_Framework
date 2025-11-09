@@ -663,6 +663,8 @@ local Emotes = {
       103040723950430,
       111474274315212,
       85452015445985,
+	  124094170750791,
+	  110511723808460,
       106383862917130,
       119895570354822,
       89740608652762,
@@ -766,6 +768,9 @@ local Emotes = {
    freaky = {
       71014156366577, -- a fucking bang Emote on Roblox, we're cooked bro, I'm telling you.
       135404588651407,
+   },
+   motion = {
+      116986761294290,
    }
 }
 wait(0.1)
@@ -810,7 +815,8 @@ local Aliases = {
    ["sus"] = "freaky",
    ["bang"] = "freaky",
    ["suspicious"] = "freaky",
-   ["weird"] = "freaky"
+   ["weird"] = "freaky",
+   ["hellamotion"] = "motion"
 }
 wait(0.1)
 getgenv().Aliases = Aliases
