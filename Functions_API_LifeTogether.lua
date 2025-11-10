@@ -1008,10 +1008,8 @@ end
 
 wait(0.1)
 local lastEmoteTime = 0
-local animate = get_animate_localscript(getgenv().LocalPlayer or game.Players.LocalPlayer)
-if not getgenv().animate_local_script_var then
-   getgenv().animate_local_script_var = animate
-end
+local plr_char = getgenv().get_char(game.Players.LocalPlayer) or getgenv().Character
+local animate = plr_char:FindFirstChild("Animate") or plr_char:WaitForChild("Animate", 10)
 wait()
 function do_emote(input)
    if tick() - lastEmoteTime < 3.5 then
@@ -1019,8 +1017,7 @@ function do_emote(input)
    end
    lastEmoteTime = tick()
 
-   local plr_char = getgenv().get_char(getgenv().LocalPlayer or game.Players.LocalPlayer) or getgenv().Character or getgenv().LocalPlayer.Character or getgenv().LocalPlayer.CharacterAdded:Wait() or game.Players.LocalPlayer.CharacterAdded:Wait()
-   local Humanoid = get_human(game.Players.LocalPlayer) or getgenv().get_char(game.Players.LocalPlayer):FindFirstChildOfClass("Humanoid") or getgenv().Humanoid
+   local Humanoid = get_human(game.Players.LocalPlayer) or getgenv().Humanoid
    if not Humanoid then
       disable_emoting()
       return getgenv().notify("Error", "Humanoid doesn't exist? (Try resetting)", 5)
