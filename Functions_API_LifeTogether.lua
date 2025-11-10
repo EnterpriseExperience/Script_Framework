@@ -758,7 +758,7 @@ function DisableFlyScript()
       hrp.ExecutorFlyPosition:Destroy()
    end
 
-   if getgenv().Character:FindFirstChildWhichIsA("Humanoid") then
+   if getgenv().Character:FindFirstChildWhichIsA("Humanoid") and getgenv().Humanoid then
       getgenv().Humanoid.PlatformStand = false
    end
 end
@@ -814,8 +814,8 @@ local Emotes = {
       103040723950430,
       111474274315212,
       85452015445985,
-	  124094170750791,
-	  110511723808460,
+	   124094170750791,
+	   110511723808460,
       106383862917130,
       119895570354822,
       89740608652762,
@@ -925,7 +925,9 @@ local Emotes = {
    }
 }
 wait(0.1)
-getgenv().Emotes = Emotes
+if not getgenv().Emotes then
+   getgenv().Emotes = Emotes
+end
 
 local Aliases = {
    ["orange justice"] = "orangejustice",
@@ -988,7 +990,7 @@ function disable_emoting()
 
    task.wait(0.3)
 
-   local animate = getgenv().get_char(game.Players.LocalPlayer):WaitForChild("Animate", 5)
+   local animate = get_animate_localscript(game.Players.LocalPlayer)
    if animate and animate.Disabled then
       animate.Disabled = false
    end
@@ -1006,10 +1008,14 @@ end
 
 wait(0.1)
 local lastEmoteTime = 0
+local animate = get_animate_localscript(getgenv().LocalPlayer or game.Players.LocalPlayer)
+if not getgenv().animate_local_script_var then
+   getgenv().animate_local_script_var = animate
+end
 wait()
 function do_emote(input)
-   if tick() - lastEmoteTime < 2 then
-      return getgenv().notify("Warning", "Hold On! Emoting is on cooldown, wait a second (literally).", 5)
+   if tick() - lastEmoteTime < 3.5 then
+      return getgenv().notify("Warning", "Hold On! Emoting is on cooldown, wait ~3 seconds.", 5)
    end
    lastEmoteTime = tick()
 
@@ -1031,20 +1037,20 @@ function do_emote(input)
    if emoteList then
       getgenv().Is_Currently_Emoting = true
       local choice = emoteList[math.random(1, #emoteList)]
-      if not plr_char:FindFirstChild("Animate") then
+      if not animate then
          getgenv().Is_Currently_Emoting = false
          return getgenv().notify("Error", "Something unexpected happened while trying to emote, try again (Animate LocalScript missing).", 10)
       end
-      if plr_char:FindFirstChild("Animate") and plr_char:FindFirstChild("Animate").Disabled then
+      if animate and animate.Disabled then
          getgenv().notify("Warning", "For some reason, the Animate LocalScript was still disabled, we enabled it (will disable in a second).", 10)
-         plr_char:WaitForChild("Animate").Disabled = false
+         animate.Disabled = false
       end
       local ok, track = Humanoid and Humanoid:PlayEmoteAndGetAnimTrackById(choice)
       wait(.1)
       for _, v in ipairs(Humanoid:GetPlayingAnimationTracks(Humanoid)) do
          v.Looped = true
       end
-      local animate = plr_char:FindFirstChild("Animate", true) or plr_char:WaitForChild("Animate", 5)
+
       if animate then
          animate.Disabled = true
       end
@@ -1059,7 +1065,6 @@ function do_emote(input)
             conn = track.Stopped:Connect(function()
                if conn then conn:Disconnect() end
                if plr_char and plr_char:FindFirstChild("Animate") then
-                  local animate = plr_char:WaitForChild("Animate", 3)
                   if animate.Disabled then
                      animate.Disabled = false
                   end
@@ -1070,7 +1075,7 @@ function do_emote(input)
       else
          if animate and animate.Parent then
             if animate.Disabled then
-               plr_char:WaitForChild("Animate", 10).Disabled = false
+               animate.Disabled = false
             end
          end
          getgenv().Is_Currently_Emoting = false
