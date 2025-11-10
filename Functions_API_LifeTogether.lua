@@ -1,5 +1,5 @@
 if not getgenv().Game then
-    getgenv().Game = cloneref and cloneref(game) or game
+   getgenv().Game = cloneref and cloneref(game) or game
 end
 
 local RunTime_Functions_API = {}
@@ -29,46 +29,46 @@ local function safeSet(inst, prop, val)
 end
 wait(0.1)
 function toggle_chat_tabs(toggle)
-    local Tabs = getgenv().TextChatService:FindFirstChildOfClass("ChannelTabsConfiguration")
-    wait(0.1)
-    if toggle == true then
-        if Tabs then
-            safeSet(Tabs, "Enabled", true)
-        end
-    elseif toggle == false then
-        if Tabs then
-            safeSet(Tabs, "Enabled", false)
-        end
-    else
-        return 
-    end
+   local Tabs = getgenv().TextChatService:FindFirstChildOfClass("ChannelTabsConfiguration")
+   wait(0.1)
+   if toggle == true then
+      if Tabs then
+         safeSet(Tabs, "Enabled", true)
+      end
+   elseif toggle == false then
+      if Tabs then
+         safeSet(Tabs, "Enabled", false)
+      end
+   else
+      return 
+   end
 end
 wait(0.1)
 toggle_chat_tabs(true)
 
 local function decodeHTMLEntities(str)
-    return str:gsub("&gt;", ">")
-              :gsub("&lt;", "<")
-              :gsub("&amp;", "&")
-              :gsub("&quot;", '"')
-              :gsub("&#39;", "'")
+   return str:gsub("&gt;", ">")
+            :gsub("&lt;", "<")
+            :gsub("&amp;", "&")
+            :gsub("&quot;", '"')
+            :gsub("&#39;", "'")
 end
 wait(0.1)
 getgenv().decodeHTMLEntities = decodeHTMLEntities
 
 if getgenv().FireParticlesAdded then
-    getgenv().notify("Warning", "Connection has already been loaded here.", 5)
+   getgenv().notify("Warning", "Connection has already been loaded here.", 5)
 else
-    local folder = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
-    if not folder then
-        folder = Instance.new("Folder")
-        folder.Name = "FireTemporaryReparentFolder"
-        folder.Parent = getgenv().StarterGui
-    end
-    wait(0.1)
-    getgenv().FireParticlesAdded = folder.ChildAdded:Connect(function(particle)
-        particle:Destroy()
-    end)
+   local folder = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
+   if not folder then
+      folder = Instance.new("Folder")
+      folder.Name = "FireTemporaryReparentFolder"
+      folder.Parent = getgenv().StarterGui
+   end
+   wait(0.1)
+   getgenv().FireParticlesAdded = folder.ChildAdded:Connect(function(particle)
+      particle:Destroy()
+   end)
 end
 wait(0.2)
 getgenv().SpamFire = false
@@ -77,76 +77,76 @@ getgenv().DestroyFireConnection = nil
 getgenv().HideFireConnection = nil
 task.wait(0.1)
 getgenv().CompletelyHideFlamesComingIn = function(toggle)
-    if toggle == true then
-        if getgenv().DestroyFireConnection then
-            return 
-        end
-        wait()
-        local function disableFire()
-            for i, v in ipairs(workspace:GetChildren()) do
-                if v:IsA("Model") and v.Name == "Fire" then
-                    local FireModel = v
+   if toggle == true then
+      if getgenv().DestroyFireConnection then
+         return 
+      end
+      wait()
+      local function disableFire()
+         for i, v in ipairs(workspace:GetChildren()) do
+            if v:IsA("Model") and v.Name == "Fire" then
+               local FireModel = v
 
-                    if FireModel:FindFirstChild("Fire") then
-                        local FirePart = FireModel:FindFirstChildOfClass("Part")
+               if FireModel:FindFirstChild("Fire") then
+                  local FirePart = FireModel:FindFirstChildOfClass("Part")
 
-                        if FirePart:FindFirstChildOfClass("ParticleEmitter") then
-                            local FireParticles = FirePart:FindFirstChildOfClass("ParticleEmitter")
-                            local Sound = FirePart:FindFirstChildOfClass("Sound")
+                  if FirePart:FindFirstChildOfClass("ParticleEmitter") then
+                     local FireParticles = FirePart:FindFirstChildOfClass("ParticleEmitter")
+                     local Sound = FirePart:FindFirstChildOfClass("Sound")
 
-                            FireParticles.Parent = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
-                            Sound.Parent = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
-                        end
-                    end
-                end
+                     FireParticles.Parent = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
+                     Sound.Parent = getgenv().StarterGui:FindFirstChild("FireTemporaryReparentFolder")
+                  end
+               end
             end
-        end
+         end
+      end
 
-        disableFire()
+      disableFire()
 
-        getgenv().DestroyFireConnection = getgenv().Workspace.ChildAdded:Connect(function()
-            disableFire()
-        end)
-    elseif toggle == false then
-        if getgenv().DestroyFireConnection then
-            getgenv().DestroyFireConnection:Disconnect()
-            getgenv().DestroyFireConnection = nil
-        end
-        getgenv().SpamFire = false
-    end
+      getgenv().DestroyFireConnection = getgenv().Workspace.ChildAdded:Connect(function()
+         disableFire()
+      end)
+   elseif toggle == false then
+      if getgenv().DestroyFireConnection then
+         getgenv().DestroyFireConnection:Disconnect()
+         getgenv().DestroyFireConnection = nil
+      end
+      getgenv().SpamFire = false
+   end
 end
 
 getgenv().spamming_flames = function(toggle)
-    if toggle == true then
-        if getgenv().SpamFire then
-            return getgenv().notify and getgenv().notify("Error", "Flame spamming is already enabled! Disable it before trying it again.", 5)
-        end
+   if toggle == true then
+      if getgenv().SpamFire then
+         return getgenv().notify and getgenv().notify("Error", "Flame spamming is already enabled! Disable it before trying it again.", 5)
+      end
 
-        getgenv().CompletelyHideFlamesComingIn(true)
-        task.wait(0.2)
-        getgenv().SpamFire = true
+      getgenv().CompletelyHideFlamesComingIn(true)
+      task.wait(0.2)
+      getgenv().SpamFire = true
 
-        if not getgenv().SpamFireLoop then
-            getgenv().SpamFireLoop = task.spawn(function()
-                while getgenv().SpamFire do
-                task.wait(.1)
-                    pcall(function()
-                        getgenv().Send("request_fire")
-                    end)
-                end
+      if not getgenv().SpamFireLoop then
+         getgenv().SpamFireLoop = task.spawn(function()
+            while getgenv().SpamFire do
+            task.wait(.1)
+               pcall(function()
+                  getgenv().Send("request_fire")
+               end)
+            end
 
-                getgenv().SpamFireLoop = nil
-            end)
-        end
-    elseif toggle == false then
-        if not getgenv().SpamFire then
-            return getgenv().notify("Error", "Flame spammer is not enabled!", 5)
-        end
+            getgenv().SpamFireLoop = nil
+         end)
+      end
+   elseif toggle == false then
+      if not getgenv().SpamFire then
+         return getgenv().notify("Error", "Flame spammer is not enabled!", 5)
+      end
 
-        getgenv().SpamFire = false
-        getgenv().CompletelyHideFlamesComingIn(false)
-        getgenv().SpamFire = false
-    end
+      getgenv().SpamFire = false
+      getgenv().CompletelyHideFlamesComingIn(false)
+      getgenv().SpamFire = false
+   end
 end
 
 getgenv().fire_detection_amount = 50
@@ -154,40 +154,150 @@ getgenv().FireDetector_Enabled = false
 getgenv().FireDetector_Conn = nil
 local fire_triggered = false
 
+if not getgenv().get_char then
+   getgenv().get_char = function(Player)
+      if not Player or typeof(Player) ~= "Instance" or not Player:IsA("Player") then
+         getgenv().notify("Error", "That is not a Player, or Player entered isn't an actual player.", 5)
+         return nil
+      end
+
+      local character = Player.Character
+      local attempts = 0
+      local max_attempts = 25
+
+      while not character and attempts < max_attempts do
+         task.wait(0.2)
+         character = Player.Character
+         attempts += 1
+      end
+
+      if not character then
+         local ok, newChar = pcall(function()
+            return Player.CharacterAdded:Wait()
+         end)
+         if ok and newChar then
+            character = newChar
+         end
+      end
+
+      if not character then
+         getgenv().notify("Error", "Could not fetch Character for: "..tostring(Player or "???"), 6)
+         return nil
+      end
+
+      return character
+   end
+end
+wait(0.2)
+
+local function get_human(Player)
+   local character = getgenv().get_char(Player)
+   if not character then
+      return nil
+   end
+
+   local humanoid = character:FindFirstChildOfClass("Humanoid")
+   local attempts = 0
+   local max_attempts = 25
+
+   while not humanoid and attempts < max_attempts do
+      task.wait(0.2)
+      humanoid = character:FindFirstChildOfClass("Humanoid")
+      attempts += 1
+   end
+
+   if not humanoid then
+      local ok, hum = pcall(function()
+         return character:WaitForChild("Humanoid", 5)
+      end)
+      if ok and hum then
+         humanoid = hum
+      end
+   end
+
+   if not humanoid then
+      return nil
+   end
+
+   return humanoid
+end
+wait(0.2)
+local function get_animate_localscript(player)
+   if not player then
+      return nil
+   end
+   local character = getgenv().get_char(player)
+   if not character then
+      return nil
+   end
+
+   local animate = nil
+   local attempts = 0
+   local max_attempts = 30
+
+   while not animate and attempts < max_attempts do
+      for _, v in ipairs(character:GetDescendants()) do
+         if v:IsA("LocalScript") and v.Name == "Animate" then
+            animate = v
+            break
+         end
+      end
+      if not animate then
+         task.wait(0.2)
+         attempts += 1
+      end
+   end
+
+   if not animate then
+      local ok, found = pcall(function()
+         return character:WaitForChild("Animate", 5)
+      end)
+      if ok and found then
+         animate = found
+      end
+   end
+
+   return animate
+end
+
 local function check_fire_count()
-    if fire_triggered then return end
-    local count = 0
-    for _, obj in ipairs(getgenv().Workspace:GetChildren()) do
-        if obj:IsA("Model") and obj.Name == "Fire" then
-            count += 1
-        end
-    end
-    if count >= getgenv().fire_detection_amount then
-        fire_triggered = true
-        getgenv().CompletelyHideFlamesComingIn(true)
-    end
+   if fire_triggered then return end
+   local count = 0
+   for _, obj in ipairs(getgenv().Workspace:GetChildren()) do
+      if obj:IsA("Model") and obj.Name == "Fire" then
+         count += 1
+      end
+   end
+   if count >= getgenv().fire_detection_amount then
+      fire_triggered = true
+      getgenv().CompletelyHideFlamesComingIn(true)
+   end
 end
 
-getgenv().EnableFireDetector = function()
-    if getgenv().FireDetector_Enabled then return getgenv().notify("Warning", "Fire Spam detector is already enabled!", 5) end
-    getgenv().FireDetector_Enabled = true
-    check_fire_count()
+if not getgenv().EnableFireDetector then
+   getgenv().EnableFireDetector = function()
+      if getgenv().FireDetector_Enabled then return getgenv().notify("Warning", "Fire Spam detector is already enabled!", 5) end
+      getgenv().FireDetector_Enabled = true
+      check_fire_count()
 
-    getgenv().FireDetector_Conn = getgenv().Workspace.ChildAdded:Connect(function(obj)
-        if not getgenv().FireDetector_Enabled then return end
-        if obj:IsA("Model") and obj.Name == "Fire" then
+      getgenv().FireDetector_Conn = getgenv().Workspace.ChildAdded:Connect(function(obj)
+         if not getgenv().FireDetector_Enabled then return end
+         if obj:IsA("Model") and obj.Name == "Fire" then
             check_fire_count()
-        end
-    end)
+         end
+      end)
+   end
 end
 
-getgenv().DisableFireDetector = function()
-    if not getgenv().FireDetector_Enabled then return getgenv().notify("Warning", "Fire Spam detector is not enabled!", 5) end
-    getgenv().FireDetector_Enabled = false
-    if getgenv().FireDetector_Conn then
-        getgenv().FireDetector_Conn:Disconnect()
-        getgenv().FireDetector_Conn = nil
-    end
+if not getgenv().DisableFireDetector then
+   getgenv().DisableFireDetector = function()
+      if not getgenv().FireDetector_Enabled then return getgenv().notify("Warning", "Fire Spam detector is not enabled!", 5) end
+      getgenv().FireDetector_Enabled = false
+      if getgenv().FireDetector_Conn then
+         getgenv().FireDetector_Conn:Disconnect()
+         getgenv().FireDetector_Conn = nil
+      end
+   end
 end
 wait(0.2)
 getgenv().EnableFireDetector()
@@ -204,189 +314,215 @@ getgenv().AntiFling_PlayerRemovingConn = getgenv().AntiFling_PlayerRemovingConn 
 local tracked = getgenv().AntiFling_Tracked
 local signals = getgenv().AntiFling_Signals
 
-getgenv().AntiFling_SafeSetCanCollide = function(part, value)
-    if typeof(part) == "Instance" and part:IsA("BasePart") then
-        pcall(function()
+if not getgenv().AntiFling_SafeSetCanCollide then
+   getgenv().AntiFling_SafeSetCanCollide = function(part, value)
+      if typeof(part) == "Instance" and part:IsA("BasePart") then
+         pcall(function()
             if part.CanCollide ~= value then
-                part.CanCollide = value
+               part.CanCollide = value
             end
-        end)
-    end
+         end)
+      end
+   end
 end
 
-getgenv().AntiFling_Apply = function(part)
-    if not (part and part:IsA("BasePart")) or tracked[part] then return end
-    tracked[part] = true
-    getgenv().AntiFling_SafeSetCanCollide(part, false)
+if not getgenv().AntiFling_Apply then
+   getgenv().AntiFling_Apply = function(part)
+      if not (part and part:IsA("BasePart")) or tracked[part] then return end
+      tracked[part] = true
+      getgenv().AntiFling_SafeSetCanCollide(part, false)
 
-    signals[part] = part:GetPropertyChangedSignal("CanCollide"):Connect(function()
-        if part and part.Parent and part.CanCollide ~= false then
+      signals[part] = part:GetPropertyChangedSignal("CanCollide"):Connect(function()
+         if part and part.Parent and part.CanCollide ~= false then
             getgenv().AntiFling_SafeSetCanCollide(part, false)
-        end
-    end)
+         end
+      end)
+   end
 end
 
-getgenv().AntiFling_ProtectCharacter = function(char)
-    if not char then return end
+if not getgenv().AntiFling_ProtectCharacter then
+   getgenv().AntiFling_ProtectCharacter = function(char)
+      if not char then return end
 
-    for _, inst in ipairs(char:GetDescendants()) do
-        if inst:IsA("BasePart") then
+      for _, inst in ipairs(char:GetDescendants()) do
+         if inst:IsA("BasePart") then
             getgenv().AntiFling_Apply(inst)
-        end
-    end
+         end
+      end
 
-    char.DescendantAdded:Connect(function(inst)
-        if inst:IsA("BasePart") then
+      char.DescendantAdded:Connect(function(inst)
+         if inst:IsA("BasePart") then
             getgenv().AntiFling_Apply(inst)
-        end
-    end)
+         end
+      end)
 
-    char.DescendantRemoving:Connect(function(inst)
-        if tracked[inst] then
+      char.DescendantRemoving:Connect(function(inst)
+         if tracked[inst] then
             if signals[inst] then
-                signals[inst]:Disconnect()
-                signals[inst] = nil
+               signals[inst]:Disconnect()
+               signals[inst] = nil
             end
             tracked[inst] = nil
-        end
-    end)
+         end
+      end)
+   end
 end
 
-getgenv().AntiFling_HookPlayer = function(plr)
-    if plr == LocalPlayer then return end
-    if plr.Character then
-        getgenv().AntiFling_ProtectCharacter(plr.Character)
-    end
-    plr.CharacterAdded:Connect(getgenv().AntiFling_ProtectCharacter)
+if not getgenv().AntiFling_HookPlayer then
+   getgenv().AntiFling_HookPlayer = function(plr)
+      if plr == LocalPlayer then return end
+      if plr.Character then
+         getgenv().AntiFling_ProtectCharacter(plr.Character)
+      end
+      plr.CharacterAdded:Connect(getgenv().AntiFling_ProtectCharacter)
+   end
 end
 
-getgenv().EnableAntiFling = function()
-    if getgenv().AntiFling_Enabled then
-        return getgenv().notify("Error", "Anti Fling is already enabled!", 5)
-    end
-    getgenv().AntiFling_Enabled = true
+if not getgenv().EnableAntiFling then
+   getgenv().EnableAntiFling = function()
+      if getgenv().AntiFling_Enabled then
+         return getgenv().notify("Error", "Anti Fling is already enabled!", 5)
+      end
+      getgenv().AntiFling_Enabled = true
 
-    for _, plr in ipairs(Players:GetPlayers()) do
-        getgenv().AntiFling_HookPlayer(plr)
-    end
+      for _, plr in ipairs(Players:GetPlayers()) do
+         getgenv().AntiFling_HookPlayer(plr)
+      end
 
-    getgenv().AntiFling_PlayerAddedConn = Players.PlayerAdded:Connect(getgenv().AntiFling_HookPlayer)
-    getgenv().AntiFling_PlayerRemovingConn = Players.PlayerRemoving:Connect(function(plr)
-        if plr == LocalPlayer then return end
-        local char = plr.Character
-        if not char then return end
+      if not getgenv().AntiFling_PlayerAddedConn then
+         getgenv().AntiFling_PlayerAddedConn = Players.PlayerAdded:Connect(getgenv().AntiFling_HookPlayer)
+      end
+      if not getgenv().AntiFling_PlayerRemovingConn then
+         getgenv().AntiFling_PlayerRemovingConn = Players.PlayerRemoving:Connect(function(plr)
+            if plr == LocalPlayer then return end
+            local char = plr.Character
+            if not char then return end
 
-        for _, part in ipairs(char:GetDescendants()) do
-            if tracked[part] then
-                if signals[part] then
-                    signals[part]:Disconnect()
-                    signals[part] = nil
-                end
-                tracked[part] = nil
+            for _, part in ipairs(char:GetDescendants()) do
+               if tracked[part] then
+                  if signals[part] then
+                     signals[part]:Disconnect()
+                     signals[part] = nil
+                  end
+                  tracked[part] = nil
+               end
             end
-        end
-    end)
+         end)
+      end
 
-    getgenv().AntiFling_SteppedConnection = RunService.Stepped:Connect(function()
-        for part in pairs(tracked) do
-            if typeof(part) == "Instance" and part:IsA("BasePart") and part.Parent then
-                if part.CanCollide ~= false then
-                getgenv().AntiFling_SafeSetCanCollide(part, false)
-                end
+      if not getgenv().AntiFling_SteppedConnection then
+         getgenv().AntiFling_SteppedConnection = RunService.Stepped:Connect(function()
+            for part in pairs(tracked) do
+               if typeof(part) == "Instance" and part:IsA("BasePart") and part.Parent then
+                  if part.CanCollide ~= false then
+                     getgenv().AntiFling_SafeSetCanCollide(part, false)
+                  end
+               end
             end
-        end
-    end)
+         end)
+      end
 
-    getgenv().notify("Success", "Anti Fling has been enabled.", 5)
+      getgenv().notify("Success", "Anti Fling has been enabled.", 5)
+   end
 end
 
 getgenv().Noclip_Enabled = getgenv().Noclip_Enabled or false
 getgenv().Noclip_Connection = getgenv().Noclip_Connection or nil
 local RunService = getgenv().RunService or game:GetService("RunService")
 
-getgenv().ToggleNoclip = function(toggle)
-   if toggle == true then
-      if getgenv().Noclip_Enabled then
-         return getgenv().notify("Error", "Noclip is already enabled!", 5)
-      end
-      if getgenv().Noclip_Connection then
-         return getgenv().notify("Warning", "Noclip connection is active, disable Noclip and try again.", 6)
-      end
+if not getgenv().ToggleNoclip then
+   getgenv().ToggleNoclip = function(toggle)
+      if toggle == true then
+         if getgenv().Noclip_Enabled then
+            return getgenv().notify("Error", "Noclip is already enabled!", 5)
+         end
+         if getgenv().Noclip_Connection then
+            return getgenv().notify("Warning", "Noclip connection is active, disable Noclip and try again.", 6)
+         end
 
-      local function NoclipLoop()
-         if getgenv().Character then
-            for _, part in ipairs(getgenv().Character:GetDescendants()) do
-               if part:IsA("BasePart") and part.CanCollide then
-                  part.CanCollide = false
+         local function NoclipLoop()
+            if getgenv().Character then
+               for _, part in ipairs(getgenv().Character:GetDescendants()) do
+                  if part:IsA("BasePart") and part.CanCollide then
+                     part.CanCollide = false
+                  end
                end
             end
          end
+
+         if not getgenv().Noclip_Connection then
+            getgenv().Noclip_Connection = RunService.Stepped:Connect(NoclipLoop)
+         end
+         getgenv().Noclip_Enabled = true
+         getgenv().notify("Success", "Noclip has been enabled.", 5)
+      elseif toggle == false then
+         if not getgenv().Noclip_Enabled then
+            return getgenv().notify("Error", "Noclip not enabled!", 5)
+         end
+         if getgenv().Noclip_Connection then
+            getgenv().Noclip_Connection:Disconnect()
+            getgenv().Noclip_Connection = nil
+         end
+
+         for _, part in pairs(getgenv().Character:GetDescendants()) do
+            if part and part:IsA("BasePart") then
+               part.CanCollide = true
+            end
+         end
+         getgenv().Noclip_Enabled = false
+         getgenv().notify("Success", "Noclip has been disabled.", 5)
+      else
+         return getgenv().notify("Error", "Invalid arg, expected true/false", 5)
+      end
+   end
+end
+
+if not getgenv().Toggleable_Noclip then
+   getgenv().Toggleable_Noclip = ToggleNoclip
+end
+
+if not getgenv().DisableAntiFling then
+   getgenv().DisableAntiFling = function()
+      if not getgenv().AntiFling_Enabled then
+         return getgenv().notify("Error", "Anti Fling is not enabled!", 5)
+      end
+      getgenv().AntiFling_Enabled = false
+
+      if getgenv().AntiFling_SteppedConnection then
+         getgenv().AntiFling_SteppedConnection:Disconnect()
+         getgenv().AntiFling_SteppedConnection = nil
+      end
+      if getgenv().AntiFling_PlayerAddedConn then
+         getgenv().AntiFling_PlayerAddedConn:Disconnect()
+         getgenv().AntiFling_PlayerAddedConn = nil
+      end
+      if getgenv().AntiFling_PlayerRemovingConn then
+         getgenv().AntiFling_PlayerRemovingConn:Disconnect()
+         getgenv().AntiFling_PlayerRemovingConn = nil
       end
 
-      getgenv().Noclip_Connection = RunService.Stepped:Connect(NoclipLoop)
-      getgenv().Noclip_Enabled = true
-      getgenv().notify("Success", "Noclip has been enabled.", 5)
-   elseif toggle == false then
-      if not getgenv().Noclip_Enabled then
-         return getgenv().notify("Error", "Noclip not enabled!", 5)
-      end
-      if getgenv().Noclip_Connection then
-         getgenv().Noclip_Connection:Disconnect()
-         getgenv().Noclip_Connection = nil
-      end
-
-      for _, part in pairs(getgenv().Character:GetDescendants()) do
-         if part and part:IsA("BasePart") then
-            part.CanCollide = true
+      for part, conn in pairs(signals) do
+         if conn.Disconnect then
+            pcall(conn.Disconnect, conn)
          end
       end
-      getgenv().Noclip_Enabled = false
-      getgenv().notify("Success", "Noclip has been disabled.", 5)
-   else
-      return getgenv().notify("Error", "Invalid arg, expected true/false", 5)
+
+      table.clear(signals)
+      table.clear(tracked)
+
+      getgenv().notify("Success", "Anti Fling has been disabled.", 5)
    end
 end
 
-getgenv().Toggleable_Noclip = ToggleNoclip
-
-getgenv().DisableAntiFling = function()
-   if not getgenv().AntiFling_Enabled then
-      return getgenv().notify("Error", "Anti Fling is not enabled!", 5)
-   end
-   getgenv().AntiFling_Enabled = false
-
-   if getgenv().AntiFling_SteppedConnection then
-      getgenv().AntiFling_SteppedConnection:Disconnect()
-      getgenv().AntiFling_SteppedConnection = nil
-   end
-   if getgenv().AntiFling_PlayerAddedConn then
-      getgenv().AntiFling_PlayerAddedConn:Disconnect()
-      getgenv().AntiFling_PlayerAddedConn = nil
-   end
-   if getgenv().AntiFling_PlayerRemovingConn then
-      getgenv().AntiFling_PlayerRemovingConn:Disconnect()
-      getgenv().AntiFling_PlayerRemovingConn = nil
-   end
-
-   for part, conn in pairs(signals) do
-      if conn.Disconnect then
-         pcall(conn.Disconnect, conn)
+if not getgenv().Toggle_AntiFling_Boolean_Func then
+   getgenv().Toggle_AntiFling_Boolean_Func = function(toggled)
+      if toggled == true then
+         getgenv().EnableAntiFling()
+      elseif toggled == false then
+         getgenv().DisableAntiFling()
+      else
+         return getgenv().notify("Warning", "[Invalid arguments]: Expected true/false brocaroni and cheese.", 5)
       end
-   end
-
-   table.clear(signals)
-   table.clear(tracked)
-
-   getgenv().notify("Success", "Anti Fling has been disabled.", 5)
-end
-
-getgenv().Toggle_AntiFling_Boolean_Func = function(toggled)
-   if toggled == true then
-      getgenv().EnableAntiFling()
-   elseif toggled == false then
-      getgenv().DisableAntiFling()
-   else
-      return getgenv().notify("Warning", "[Invalid arguments]: Expected true/false brocaroni and cheese.", 5)
    end
 end
 
@@ -431,7 +567,9 @@ function anti_sit_func(toggle)
    end
 end
 wait(0.1)
-getgenv().anti_sit_func = anti_sit_func
+if not getgenv().anti_sit_func then
+   getgenv().anti_sit_func = anti_sit_func
+end
 
 function anti_void(toggle)
    if toggle == true then
@@ -461,10 +599,14 @@ function anti_void(toggle)
    end
 end
 wait(0.1)
-getgenv().anti_void = anti_void
+if not getgenv().anti_void then
+   getgenv().anti_void = anti_void
+end
 
 getgenv().VehicleDestroyer_Enabled = getgenv().VehicleDestroyer_Enabled or false
-getgenv().VehicleDestroyer_Connections = getgenv().VehicleDestroyer_Connections or {}
+if not getgenv().VehicleDestroyer_Connections then
+   getgenv().VehicleDestroyer_Connections = getgenv().VehicleDestroyer_Connections or {}
+end
 
 local function clearConnections()
 	for _, conn in ipairs(getgenv().VehicleDestroyer_Connections) do
@@ -507,33 +649,37 @@ local function setupFolder(folder)
 	disableCollisionIn(folder)
 	getgenv().notify("Success", "Anti Vehicle Fling has been enabled.", 5)
 
-	getgenv().vehiclesChildAddedConn = folder.ChildAdded:Connect(function(child)
-		if not getgenv().VehicleDestroyer_Enabled then return end
+   if not getgenv().vehiclesChildAddedConn then
+      getgenv().vehiclesChildAddedConn = folder.ChildAdded:Connect(function(child)
+         if not getgenv().VehicleDestroyer_Enabled then return end
 
-		local my_vehicle = get_vehicle and get_vehicle()
-		if is_in_vehicle(child, my_vehicle) then return end
+         local my_vehicle = get_vehicle and get_vehicle()
+         if is_in_vehicle(child, my_vehicle) then return end
 
-		if child:IsA("BasePart") then
-			child.CanCollide = false
-		elseif child:IsA("Model") then
-			child.DescendantAdded:Connect(function(desc)
-				if desc:IsA("BasePart") and not is_in_vehicle(desc, my_vehicle) then
-					desc.CanCollide = false
-				end
-			end)
-			disableCollisionIn(child)
-		end
-	end)
-	table.insert(getgenv().VehicleDestroyer_Connections, getgenv().vehiclesChildAddedConn)
+         if child:IsA("BasePart") then
+            child.CanCollide = false
+         elseif child:IsA("Model") then
+            child.DescendantAdded:Connect(function(desc)
+               if desc:IsA("BasePart") and not is_in_vehicle(desc, my_vehicle) then
+                  desc.CanCollide = false
+               end
+            end)
+            disableCollisionIn(child)
+         end
+      end)
+      table.insert(getgenv().VehicleDestroyer_Connections, getgenv().vehiclesChildAddedConn)
+   end
 end
 
-getgenv().DisableVehicleDestroyer = function()
-	if not getgenv().VehicleDestroyer_Enabled then
-		return getgenv().notify("Warning", "Anti Vehicle Fling is not enabled!", 5)
-	end
-	wait(0.1)
-	getgenv().VehicleDestroyer_Enabled = false
-	clearConnections()
+if not getgenv().DisableVehicleDestroyer then
+   getgenv().DisableVehicleDestroyer = function()
+      if not getgenv().VehicleDestroyer_Enabled then
+         return getgenv().notify("Warning", "Anti Vehicle Fling is not enabled!", 5)
+      end
+      wait(0.1)
+      getgenv().VehicleDestroyer_Enabled = false
+      clearConnections()
+   end
 end
 
 function anti_car_fling(toggle)
@@ -550,23 +696,27 @@ function anti_car_fling(toggle)
 			setupFolder(vehiclesFolder)
 		end
 
-		getgenv().folderAddedConn = getgenv().Workspace.ChildAdded:Connect(function(child)
-			if child.Name == "Vehicles" and child:IsA("Folder") then
-				setupFolder(child)
-				vehiclesFolder = child
-			end
-		end)
-		table.insert(getgenv().VehicleDestroyer_Connections, getgenv().folderAddedConn)
+      if not getgenv().folderAddedConn then
+         getgenv().folderAddedConn = getgenv().Workspace.ChildAdded:Connect(function(child)
+            if child.Name == "Vehicles" and child:IsA("Folder") then
+               setupFolder(child)
+               vehiclesFolder = child
+            end
+         end)
+         table.insert(getgenv().VehicleDestroyer_Connections, getgenv().folderAddedConn)
+      end
 
-		getgenv().vehiclesHeartBeatConnection = getgenv().RunService.Heartbeat:Connect(function()
-			if not getgenv().VehicleDestroyer_Enabled then return end
-			if vehiclesFolder and vehiclesFolder.Parent then
-				disableCollisionIn(vehiclesFolder)
-			else
-				vehiclesFolder = getgenv().Workspace:FindFirstChild("Vehicles")
-			end
-		end)
-		table.insert(getgenv().VehicleDestroyer_Connections, getgenv().vehiclesHeartBeatConnection)
+      if not getgenv().vehiclesHeartBeatConnection then
+         getgenv().vehiclesHeartBeatConnection = getgenv().RunService.Heartbeat:Connect(function()
+            if not getgenv().VehicleDestroyer_Enabled then return end
+            if vehiclesFolder and vehiclesFolder.Parent then
+               disableCollisionIn(vehiclesFolder)
+            else
+               vehiclesFolder = getgenv().Workspace:FindFirstChild("Vehicles")
+            end
+         end)
+         table.insert(getgenv().VehicleDestroyer_Connections, getgenv().vehiclesHeartBeatConnection)
+      end
 	elseif toggle == false then
 		getgenv().DisableVehicleDestroyer()
 		getgenv().notify("Success", "Anti Vehicle Fling has been disabled.", 5)
@@ -575,7 +725,9 @@ function anti_car_fling(toggle)
 	end
 end
 wait(0.1)
-getgenv().anti_car_fling = anti_car_fling
+if not getgenv().anti_car_fling then
+   getgenv().anti_car_fling = anti_car_fling
+end
 
 getgenv().HD_FlyEnabled = false
 local FlyConnection
@@ -610,8 +762,6 @@ function DisableFlyScript()
       getgenv().Humanoid.PlatformStand = false
    end
 end
-wait(0.1)
-getgenv().DisableFlyScript = DisableFlyScript
 
 local Emotes = {
    griddy = {
@@ -820,10 +970,12 @@ local Aliases = {
    ["hellamotion"] = "motion"
 }
 wait(0.1)
-getgenv().Aliases = Aliases
+if not getgenv().Aliases then
+   getgenv().Aliases = Aliases
+end
 wait(0.2)
 function disable_emoting()
-   local Humanoid = getgenv().Humanoid
+   local Humanoid = get_human(game.Players.LocalPlayer) or getgenv().get_char(game.Players.LocalPlayer):FindFirstChildOfClass("Humanoid") or getgenv().Humanoid
    if not Humanoid then return end
 
    Humanoid.WalkSpeed = 0
@@ -836,7 +988,7 @@ function disable_emoting()
 
    task.wait(0.3)
 
-   local animate = getgenv().Character:FindFirstChild("Animate") or getgenv().Character:WaitForChild("Animate", 1)
+   local animate = getgenv().get_char(game.Players.LocalPlayer):WaitForChild("Animate", 5)
    if animate and animate.Disabled then
       animate.Disabled = false
    end
@@ -848,7 +1000,9 @@ function disable_emoting()
    end
 end
 wait(0.1)
-getgenv().disable_emoting_script = disable_emoting
+if not getgenv().disable_emoting_script then
+   getgenv().disable_emoting_script = disable_emoting
+end
 
 wait(0.1)
 local lastEmoteTime = 0
@@ -859,7 +1013,8 @@ function do_emote(input)
    end
    lastEmoteTime = tick()
 
-   local Humanoid = getgenv().Humanoid
+   local plr_char = getgenv().get_char(getgenv().LocalPlayer or game.Players.LocalPlayer) or getgenv().Character or getgenv().LocalPlayer.Character or getgenv().LocalPlayer.CharacterAdded:Wait() or game.Players.LocalPlayer.CharacterAdded:Wait()
+   local Humanoid = get_human(game.Players.LocalPlayer) or getgenv().get_char(game.Players.LocalPlayer):FindFirstChildOfClass("Humanoid") or getgenv().Humanoid
    if not Humanoid then
       disable_emoting()
       return getgenv().notify("Error", "Humanoid doesn't exist? (Try resetting)", 5)
@@ -876,35 +1031,35 @@ function do_emote(input)
    if emoteList then
       getgenv().Is_Currently_Emoting = true
       local choice = emoteList[math.random(1, #emoteList)]
-      if not getgenv().Character:FindFirstChild("Animate") then
+      if not plr_char:FindFirstChild("Animate") then
          getgenv().Is_Currently_Emoting = false
-         return getgenv().notify("Error", "Something unexpected happened while trying to emote, try again.", 5)
+         return getgenv().notify("Error", "Something unexpected happened while trying to emote, try again (Animate LocalScript missing).", 10)
       end
-      if getgenv().Character:FindFirstChild("Animate").Disabled then
+      if plr_char:FindFirstChild("Animate") and plr_char:FindFirstChild("Animate").Disabled then
          getgenv().notify("Warning", "For some reason, the Animate LocalScript was still disabled, we enabled it (will disable in a second).", 10)
-         getgenv().Character:WaitForChild("Animate").Disabled = false
+         plr_char:WaitForChild("Animate").Disabled = false
       end
-      local ok, track = Humanoid:PlayEmoteAndGetAnimTrackById(choice)
+      local ok, track = Humanoid and Humanoid:PlayEmoteAndGetAnimTrackById(choice)
       wait(.1)
-      for _, v in ipairs(getgenv().Humanoid:GetPlayingAnimationTracks(getgenv().Humanoid)) do
+      for _, v in ipairs(Humanoid:GetPlayingAnimationTracks(Humanoid)) do
          v.Looped = true
       end
-      local animate = getgenv().Character:FindFirstChild("Animate", true) or getgenv().Character:WaitForChild("Animate", 5)
+      local animate = plr_char:FindFirstChild("Animate", true) or plr_char:WaitForChild("Animate", 5)
       if animate then
          animate.Disabled = true
       end
 
       if ok and track then
          -- [[ Some emotes don't like to loop, so let's force that. ]] --
-         for _, v in ipairs(getgenv().Humanoid:GetPlayingAnimationTracks(getgenv().Humanoid)) do
+         for _, v in ipairs(Humanoid:GetPlayingAnimationTracks(Humanoid)) do
             v.Looped = true
          end
          task.spawn(function()
             local conn
             conn = track.Stopped:Connect(function()
                if conn then conn:Disconnect() end
-               if getgenv().Character and getgenv().Character:FindFirstChild("Animate") then
-                  local animate = getgenv().Character:WaitForChild("Animate", 3)
+               if plr_char and plr_char:FindFirstChild("Animate") then
+                  local animate = plr_char:WaitForChild("Animate", 3)
                   if animate.Disabled then
                      animate.Disabled = false
                   end
@@ -915,7 +1070,7 @@ function do_emote(input)
       else
          if animate and animate.Parent then
             if animate.Disabled then
-               getgenv().Character:WaitForChild("Animate", 10).Disabled = false
+               plr_char:WaitForChild("Animate", 10).Disabled = false
             end
          end
          getgenv().Is_Currently_Emoting = false
