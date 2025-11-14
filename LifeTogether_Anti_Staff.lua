@@ -17,8 +17,8 @@ function getmainraw(v)
 end
 
 if success and latestversioninfo then
-   local raw = getmainraw(latestversioninfo.LifeTogether_Admin_Version)
-   if raw ~= getgenv().Script_Version_GlobalGenv then
+   local ver = latestversioninfo.LifeTogether_Admin_Version
+   if ver ~= getgenv().Script_Version_GlobalGenv then
       getgenv().LifeTogetherRP_Admin = false
       wait(0.3)
       for i = 1,2 do
