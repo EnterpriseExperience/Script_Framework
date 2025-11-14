@@ -7,7 +7,17 @@ local players = game:GetService("Players")
 local teleportservice = game:GetService("TeleportService")
 local placeid = game.PlaceId
 local jobid = game.JobId
-
+local AllClipboards = setclipboard or toclipboard or set_clipboard or (Clipboard and Clipboard.set)
+local NotifyLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/main/Notification_Lib.lua"))()
+wait(0.1)
+function notify(notif_type, msg, duration)
+   NotifyLib:External_Notification(tostring(notif_type), tostring(msg), tonumber(duration))
+end
+wait(0.1)
+if not getgenv().notify then
+   getgenv().notify = notify
+end
+wait(0.3)
 local success, latest = pcall(function()
     local vjson = game:HttpGet("https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/main/Script_Versions_JSON?cachebust=" .. tick())
     return http:JSONDecode(vjson)
@@ -22,8 +32,13 @@ if success and latest then
 
     if latestver ~= getgenv().Script_Version_GlobalGenv then
         getgenv().LifeTogetherRP_Admin = false
-        wait(0.3)
-
+        wait(0.5)
+        if AllClipboards then
+            AllClipboards("loadstring(game:HttpGet('https://raw.githubusercontent.com/EnterpriseExperience/MicUpSource/refs/heads/main/LifeTogether_RP_Admin.lua'))()")
+            getgenv().notify("Warning", "PLEASE SAVE THE LOADSTRING COPIED TO YOUR CLIPBOARD, DO NOT USE THE SCRIPT YOU WE'RE JUST EXECUTING!", 30)
+        else
+            getgenv().notify("Error", "Please execute the correct Loadstring next time, or this will keep happening!", 30)
+        end
         for i = 1,2 do
             task.wait(0.5)
             players.LocalPlayer.OnTeleport:Connect(function(state)
